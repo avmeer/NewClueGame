@@ -47,21 +47,24 @@ public class ComputerPlayer extends Player {
 		String person = null;
 		String room = null;
 		String weapon = null;
-		
+		//Select randomly from cards we have not seen
 		while(person == null && weapon == null) {
 			Card card = deck.get(random);
+			//Find the guess for person
 			if (person == null && card.type == CardType.PERSON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
 					person = card.name;
 				}
-			} else if (weapon == null && card.type == CardType.WEAPON) {
+			} 
+			//Find guess for weapon
+			else if (weapon == null && card.type == CardType.WEAPON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
 					weapon = card.name;
 				}
 			}
 			random = (int)(Math.random() * (deck.size() + 1));
 		}
-
+		//Set last visited room
 		room = legend.get(lastRoomVisited);
 		return new Solution(person, weapon, room);
 	}
