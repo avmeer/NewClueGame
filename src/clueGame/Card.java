@@ -18,12 +18,4 @@ public class Card {
 		}
 		return this.name.equals(((Card) obj).name);
 	}
-	
-	/*public boolean equals(Card card) {
-		System.out.println("I'm being called");
-		if (card.name.equals(this.name) && card.type.equals(this.type)) {
-			return true;
-		}
-		return false;
-	}*/
 }

@@ -16,8 +16,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-//import clue.BoardCell;
-//import clue.IntBoard;
 
 public class Board extends JPanel {
 
@@ -245,8 +243,8 @@ public class Board extends JPanel {
 		return targets;
 	}
 	
-	public LinkedList<BoardCell> getAdjList(int i, int j) {
-		return adjMtx.get(board[i][j]);
+	public LinkedList<BoardCell> getAdjList(int row, int col) {
+		return adjMtx.get(board[row][col]);
 	}
 	
 	public void setPlayers(ArrayList<Player> players) {
