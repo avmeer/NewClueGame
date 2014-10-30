@@ -228,12 +228,12 @@ public class Board extends JPanel {
 			}
 		} else { 
 			LinkedList<BoardCell> nextList = adjMtx.get(board[row][col]);
-			for(BoardCell e : nextList) {
-				if(!visited.contains(e) && !e.equals(current)){
-					visited.add(e);
-					targetHelper(e.getRow(),e.getColumn(),steps-1);
+			for(BoardCell cell : nextList) {
+				if(!visited.contains(cell) && !cell.equals(current)){
+					visited.add(cell);
+					targetHelper(cell.getRow(),cell.getColumn(),steps-1);
 				}
-				visited.remove(e);
+				visited.remove(cell);
 			}
 		}
 		
@@ -256,13 +256,8 @@ public class Board extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numColumns; col++) {
-				board[row][col].draw(g, this);
-			}
-		}
+		drawBoardCells(g);
 		drawPlayers(g);
-		
 	}
 	
 	public void drawPlayers(Graphics g){
@@ -270,7 +265,13 @@ public class Board extends JPanel {
 			player.draw(g);
 		}
 	}
-	
+	public void drawBoardCells(Graphics g){
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numColumns; col++) {
+				board[row][col].draw(g, this);
+			}
+		}
+	}
 
 
 	
