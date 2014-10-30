@@ -1,21 +1,21 @@
-Garage
-Kitchen
-Lounge
-Study
-Pool Room
-Conservatory
-Bedroom
-Ball Room
-Dining Room
-Lily
-Marshall
-Barney
-Ted
-Robin
-Carl
-Knife
-Candlestick
-Lead pipe
-Revolver
-Rope
-Wrench 
+Garage,R
+Kitchen,R
+Lounge,R
+Study,R
+Pool Room,R
+Conservatory,R
+Bedroom,R
+Ball Room,R
+Dining Room,R
+Lily,P
+Marshall,P
+Barney,P
+Ted,P
+Robin,P
+Carl,P
+Knife,W
+Candlestick,W
+Lead pipe,W
+Revolver,W
+Rope,W
+Wrench,W
