@@ -217,17 +217,17 @@ public class Board extends JPanel {
 
 	}
 	
-	public void targetHelper(int i, int j, int steps) {
+	public void targetHelper(int row, int col, int steps) {
 		if(steps == 0) {
-			if (!targets.contains(board[i][j])) {
-				targets.add(board[i][j]);
+			if (!targets.contains(board[row][col])) {
+				targets.add(board[row][col]);
 			}
-		} else if(board[i][j].isDoorway() && board[i][j]!=current) {
-			if (!targets.contains(board[i][j])) {
-				targets.add(board[i][j]);
+		} else if(board[row][col].isDoorway() && board[row][col]!=current) {
+			if (!targets.contains(board[row][col])) {
+				targets.add(board[row][col]);
 			}
 		} else { 
-			LinkedList<BoardCell> nextList = adjMtx.get(board[i][j]);
+			LinkedList<BoardCell> nextList = adjMtx.get(board[row][col]);
 			for(BoardCell e : nextList) {
 				if(!visited.contains(e) && !e.equals(current)){
 					visited.add(e);
