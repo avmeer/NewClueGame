@@ -33,29 +33,20 @@ public class ClueGame extends JFrame {
 
 	public ClueGame()
 	{
-		rooms = new HashMap<Character,String>();
-		layoutFile = "ClueLayout.csv";
-		configFile = "ClueLegend.txt";
-		playerConfigFile = "CluePlayers.txt";
-		deckConfigFile = "Deck.txt";
-		theBoard = new Board(layoutFile);
-		players = new ArrayList<Player>();
-		deck = new ArrayList<Card>();
-		seen = new ArrayList<Card>();
-		add(theBoard);
-		setSize(800, 800);
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		menuBar.add(createFileMenu());
+		this("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","Deck.txt");
 	}
 
 	public ClueGame(String layout, String legend)
 	{
+		this(layout, legend,"CluePlayers.txt","Deck.txt");
+	}
+	public ClueGame(String layout, String legend, String playerConfig, String deckConfig)
+	{
 		rooms = new HashMap<Character, String>();
 		layoutFile = layout;
 		configFile = legend;
-		playerConfigFile = "CluePlayers.txt";
-		deckConfigFile = "Deck.txt";
+		playerConfigFile = playerConfig;
+		deckConfigFile = deckConfig;
 		theBoard = new Board(layout);
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
