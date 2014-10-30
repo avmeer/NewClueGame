@@ -261,12 +261,15 @@ public class Board extends JPanel {
 				board[row][col].draw(g, this);
 			}
 		}
+		drawPlayers(g);
 		
+	}
+	
+	public void drawPlayers(Graphics g){
 		for(Player player : players) {
 			player.draw(g);
 		}
 	}
-	
 	
 
 
