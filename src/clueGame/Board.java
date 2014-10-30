@@ -139,57 +139,69 @@ public class Board extends JPanel {
 		adjMtx = new HashMap<BoardCell, LinkedList<BoardCell>>();
 		for(int i=0;i<numRows;i++) {
 			for(int j=0;j<numColumns;j++) {
+				BoardCell Up=null,Down=null,Left=null,Right=null,Current;
+				if(i>0)
+					Up=board[i-1][j];
+				if(i<numRows-1)
+					Down=board[i+1][j];
+				if(j>0)
+					Left=board[i][j-1];
+				if(j<numColumns-1)
+					Right=board[i][j+1];
+				Current=board[i][j];
+				
+				
 				LinkedList<BoardCell> adjList = new LinkedList<BoardCell>();
-				if(board[i][j].isDoorway()){
-					switch(((RoomCell) board[i][j]).getDoorDirection()) {
+				if(Current.isDoorway()){
+					switch(((RoomCell) Current).getDoorDirection()) {
 					case UP:
-						adjList.add(board[i-1][j]);
+						adjList.add(Up);
 						break;
 					case DOWN:
-						adjList.add(board[i+1][j]);
+						adjList.add(Down);
 						break;
 					case LEFT:
-						adjList.add(board[i][j-1]);
+						adjList.add(Left);
 						break;
 					case RIGHT:
-						adjList.add(board[i][j+1]);
+						adjList.add(Right);
 						break;
 					case NONE:
 						break;
 					}
-				} else if (board[i][j].isWalkway()) {
-					if(i>0 && board[i-1][j].isWalkway()){
-						adjList.add(board[i-1][j]);
-					} else if (i>0 && board[i-1][j].isDoorway()){
-						if( ((RoomCell) board[i-1][j]).getDoorDirection()==RoomCell.DoorDirection.DOWN) {
-							adjList.add(board[i-1][j]);
+				} else if (Current.isWalkway()) {
+					if(i>0 && Up.isWalkway()){
+						adjList.add(Up);
+					} else if (i>0 && Up.isDoorway()){
+						if( ((RoomCell) Up).getDoorDirection()==RoomCell.DoorDirection.DOWN) {
+							adjList.add(Up);
 						}
 					}
-					if(i<numRows-1 && board[i+1][j].isWalkway()){
-						adjList.add(board[i+1][j]);
-					} else if (i<numRows-1 && board[i+1][j].isDoorway()){
-						if( ((RoomCell) board[i+1][j]).getDoorDirection()==RoomCell.DoorDirection.UP) {
-							adjList.add(board[i+1][j]);
+					if(i<numRows-1 && Down.isWalkway()){
+						adjList.add(Down);
+					} else if (i<numRows-1 && Down.isDoorway()){
+						if( ((RoomCell) Down).getDoorDirection()==RoomCell.DoorDirection.UP) {
+							adjList.add(Down);
 						}
 					}
-					if(j>0 && board[i][j-1].isWalkway()){
-						adjList.add(board[i][j-1]);
-					} else if (j>0 && board[i][j-1].isDoorway()){
-						if( ((RoomCell) board[i][j-1]).getDoorDirection()==RoomCell.DoorDirection.RIGHT) {
-							adjList.add(board[i][j-1]);
+					if(j>0 && Left.isWalkway()){
+						adjList.add(Left);
+					} else if (j>0 && Left.isDoorway()){
+						if( ((RoomCell) Left).getDoorDirection()==RoomCell.DoorDirection.RIGHT) {
+							adjList.add(Left);
 						}
 					}
-					if(j<numColumns-1 && board[i][j+1].isWalkway()){
-						adjList.add(board[i][j+1]);
-					} else if (j<numColumns-1 && board[i][j+1].isDoorway()){
-						if( ((RoomCell) board[i][j+1]).getDoorDirection()==RoomCell.DoorDirection.LEFT) {
-							adjList.add(board[i][j+1]);
+					if(j<numColumns-1 && Right.isWalkway()){
+						adjList.add(Right);
+					} else if (j<numColumns-1 && Right.isDoorway()){
+						if( ((RoomCell) Right).getDoorDirection()==RoomCell.DoorDirection.LEFT) {
+							adjList.add(Right);
 						}
 					}
 				} else {
 					
 				}
-				adjMtx.put(board[i][j], adjList);
+				adjMtx.put(Current, adjList);
 			}
 		}
 				
