@@ -207,9 +207,9 @@ public class Board extends JPanel {
 				
 	}
 	
-	public void calcTargets(int i, int j, int steps) {
+	public void calcTargets(int row, int col, int steps) {
 		targets.clear();
-		current = board[i][j];
+		current = board[row][col];
 		visited = new ArrayList<BoardCell>();
 		if(steps > 0 ) {
 			targetHelper(current.getRow(), current.getColumn(), steps);
