@@ -9,8 +9,10 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Timer;
 
 import javax.swing.JFrame;
@@ -32,6 +34,10 @@ public class ClueGame extends JFrame {
 	private Solution solution;
 	public static final int CELL_SIZE = 26;
 	private DetectiveNotes dN;
+	private HumanPlayer humanPlayer;
+	private int currentTurn=0;
+
+	private CardDisplay cardDisplay;
 
 	public ClueGame()
 	{
@@ -58,6 +64,9 @@ public class ClueGame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
+		loadConfigFiles();
+		cardDisplay = new CardDisplay(humanPlayer.getHand());
+		add(cardDisplay,BorderLayout.EAST);
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
@@ -132,7 +141,8 @@ public class ClueGame extends JFrame {
 			}
 
 			if (isFirstRound) {
-				players.add(new HumanPlayer(splitLine[0], splitLine[1], Integer.valueOf(splitLine[2]), Integer.valueOf(splitLine[3])));
+				humanPlayer = new HumanPlayer(splitLine[0], splitLine[1], Integer.valueOf(splitLine[2]), Integer.valueOf(splitLine[3]));
+				players.add(humanPlayer);
 			} else {
 				players.add(new ComputerPlayer(splitLine[0], splitLine[1], Integer.valueOf(splitLine[2]), Integer.valueOf(splitLine[3])));
 			}
@@ -252,15 +262,22 @@ public class ClueGame extends JFrame {
 		item.addActionListener(new MenuItemListener());
 		return item;
 	}
+	private void nextPlayer(){
+		Player currentPlayer=players.get(currentTurn);
+		currentTurn++;
+		if(currentTurn>players.size()){
+			currentTurn=0;
+		}
+		currentPlayer.makeMove(theBoard);
+
+		if(currentPlayer==humanPlayer){
+			
+		}
+	}
 
 	public static void main(String[] args) {
-		/*		ClueGame game = new ClueGame();
-		Board board = game.getBoard();
-		game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		game.setVisible(true);*/
 
 		ClueGame game = new ClueGame("ourBoardLayout.csv", "ourLegend.csv");
-		game.loadConfigFiles();
 		Board board = game.getBoard();
 		board.calcAdjacencies();
 		game.deal();
@@ -273,7 +290,8 @@ public class ClueGame extends JFrame {
 
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
-		//JOptionPane.showMessageDialog(game,"You are "+game.getPlayers().get(0).getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
+		game.nextPlayer();
 	}
 
 }

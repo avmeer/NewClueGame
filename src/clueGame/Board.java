@@ -2,6 +2,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener{
 
 	private Map<BoardCell, LinkedList<BoardCell>> adjMtx;
 	private Set<BoardCell> targets;
@@ -37,6 +39,7 @@ public class Board extends JPanel {
 	public Board(String lF) {
 		layoutFile = lF;
 		targets = new HashSet<BoardCell>();
+		addMouseListener(this);
 	}
 		
 	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException{
@@ -269,6 +272,41 @@ public class Board extends JPanel {
 				board[row][col].draw(g, this);
 			}
 		}
+	}
+	
+	public void mousePressed(MouseEvent e)  {
+		
+		for(BoardCell t: targets){
+			if (t.containsClick(e.getX(), e.getY())) {
+				System.out.println("Clicked target");
+				return;
+			}
+		}
+		System.out.println("Not a target");
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

@@ -1,10 +1,13 @@
 package clueGame;
 
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-public abstract class BoardCell {
+public abstract class BoardCell{
 	protected int column;
 	protected int row;
+	protected boolean highlighted;
 
 	public BoardCell(int r, int c)
 	{
@@ -39,8 +42,17 @@ public abstract class BoardCell {
 	public int getRow() {
 		return row;
 	}
+	public void setHighlighted(boolean lighted){
+		highlighted=lighted;
+	}
 	
 	public abstract void draw(Graphics g, Board board);
-
+	
+	public boolean containsClick(int mouseX, int mouseY) {
+		Rectangle rect = new Rectangle(ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row,ClueGame.CELL_SIZE,ClueGame.CELL_SIZE);
+		if (rect.contains(new Point(mouseX, mouseY))) 
+			return true;
+		return false;
+	}
 	
 }

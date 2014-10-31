@@ -76,4 +76,15 @@ public class ComputerPlayer extends Player {
 	public void setLastRoomVisited(char lastRoomVisited) {
 		this.lastRoomVisited = lastRoomVisited;
 	}
+
+	@Override
+	public void makeMove(Board theBoard) {
+		int roll=(int)(Math.random() *5)+1;
+		theBoard.calcTargets(this.getRow(),this.getCol(), roll);
+		BoardCell target=pickLocation(theBoard.getTargets());
+		this.setRow(target.getRow());
+		this.setCol(target.getColumn());
+		theBoard.repaint();
+		
+	}
 }

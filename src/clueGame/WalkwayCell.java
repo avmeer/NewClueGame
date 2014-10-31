@@ -6,19 +6,14 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 public class WalkwayCell extends BoardCell {
-	private boolean highlighted;
 	public WalkwayCell(int r, int c) {
 		super(r, c);
-		highlighted=false;
 	}
 
 	@Override
 	public Boolean isWalkway()
 	{
 		return true;
-	}
-	public void setHighlighted(boolean lighted){
-		highlighted=lighted;
 	}
 
 	@Override

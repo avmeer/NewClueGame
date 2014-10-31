@@ -5,13 +5,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 public class RoomCell extends BoardCell {
-	
+
 	public enum DoorDirection { UP, DOWN, LEFT, RIGHT, NONE};
-	
+
 	public final DoorDirection doorDirection;
 	private char roomInitial;
 	private boolean isNameCell = false;
-	
+
 	public RoomCell(int r, int c, String status) {
 		super(r, c);
 		roomInitial = status.charAt(0);
@@ -23,18 +23,18 @@ public class RoomCell extends BoardCell {
 		{	
 			switch(status.charAt(1)) {
 			case 'U': doorDirection = DoorDirection.UP;
-				break;
+			break;
 			case 'D': doorDirection = DoorDirection.DOWN;
-				break;
+			break;
 			case 'R': doorDirection = DoorDirection.RIGHT;
-				break;
+			break;
 			case 'L': doorDirection = DoorDirection.LEFT;
-				break;
+			break;
 			case 'N': doorDirection = DoorDirection.NONE;
-				isNameCell = true;
-				break;
+			isNameCell = true;
+			break;
 			default: doorDirection = DoorDirection.NONE;
-				break;
+			break;
 			}
 		}
 	}
@@ -43,18 +43,18 @@ public class RoomCell extends BoardCell {
 	public Boolean isDoorway() {
 		return !(doorDirection == DoorDirection.NONE);	
 	}
-	
+
 	@Override
 	public Boolean isRoom()
 	{
 		return true;
 	}
-	
+
 	public char getInitial()
 	{
 		return roomInitial;
 	}
-	
+
 	public DoorDirection getDoorDirection()
 	{
 		return doorDirection;
@@ -75,26 +75,34 @@ public class RoomCell extends BoardCell {
 			g.setColor(Color.BLUE);
 			g.drawString(" " + board.getRooms().get(roomInitial).toUpperCase(), ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row);
 		}
-		
+
 		if(isDoorway()) {
-			g.setColor(Color.BLUE);
-			
-			switch (doorDirection) {
+			if(!highlighted){
+				g.setColor(Color.BLUE);
+
+				switch (doorDirection) {
 				case NONE:
 					break;
 				case UP:  g.fillRect(ClueGame.CELL_SIZE * column, (int)(ClueGame.CELL_SIZE * (row)), ClueGame.CELL_SIZE, 7);
-					break;
+				break;
 				case DOWN: g.fillRect(ClueGame.CELL_SIZE * column, (int)(ClueGame.CELL_SIZE * (row + 1)) - 7, ClueGame.CELL_SIZE, 7);
-					break;
+				break;
 				case LEFT:  g.fillRect((int)(ClueGame.CELL_SIZE * (column)), ClueGame.CELL_SIZE * row, 7, ClueGame.CELL_SIZE);
-					break;
+				break;
 				case RIGHT:  g.fillRect((int)(ClueGame.CELL_SIZE * (column + 1)) - 7, ClueGame.CELL_SIZE * row, 7, ClueGame.CELL_SIZE);
-					break;
+				break;
+				}
+			}
+			else{
+				g.setColor(Color.YELLOW);
+				g.fillRect(ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row, ClueGame.CELL_SIZE, ClueGame.CELL_SIZE);
+				g.setColor(Color.BLACK);
+				g.drawRect(ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row, ClueGame.CELL_SIZE, ClueGame.CELL_SIZE);
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }
 
