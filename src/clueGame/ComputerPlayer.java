@@ -78,8 +78,7 @@ public class ComputerPlayer extends Player {
 	}
 
 	@Override
-	public void makeMove(Board theBoard) {
-		int roll=(int)(Math.random() *5)+1;
+	public void makeMove(Board theBoard,int roll) {
 		theBoard.calcTargets(this.getRow(),this.getCol(), roll);
 		BoardCell target=pickLocation(theBoard.getTargets());
 		this.setRow(target.getRow());

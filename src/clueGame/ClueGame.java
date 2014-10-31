@@ -20,6 +20,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class ClueGame extends JFrame {
 	private Map<Character,String> rooms;
@@ -62,15 +63,11 @@ public class ClueGame extends JFrame {
 		deck = new ArrayList<Card>();
 		seen = new ArrayList<Card>();
 		add(theBoard,BorderLayout.CENTER);
-		setSize(800, 800);
+		setSize(700, 800);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		loadConfigFiles();
-		cardDisplay = new CardDisplay(humanPlayer.getHand());
-		add(cardDisplay,BorderLayout.EAST);
-		controlGUI= new ControlGUI(this);
-		add(controlGUI,BorderLayout.SOUTH);
+		
 
 	}
 
@@ -269,16 +266,19 @@ public class ClueGame extends JFrame {
 	}
 	public void nextPlayer(){
 		Player currentPlayer=players.get(currentTurn);
+		controlGUI.setWhoseTurn(currentPlayer.getName());
 		if(!theBoard.isHumanPlayerMustFinish()){
 			currentTurn++;
-			if(currentTurn>players.size()){
+			if(currentTurn>players.size()-1){
 				currentTurn=0;
 			}
 			if(currentPlayer==humanPlayer){
 				theBoard.setHumanPlayerMustFinish(true);
 			}
-
-			currentPlayer.makeMove(theBoard);
+			int roll=(int)(Math.random() *5)+1;
+			currentPlayer.makeMove(theBoard,roll);
+			controlGUI.setDieField(Integer.toString(roll));
+			
 		}
 		else{
 			JOptionPane.showMessageDialog(this,"You must complete your turn");
@@ -288,10 +288,17 @@ public class ClueGame extends JFrame {
 	public static void main(String[] args) {
 
 		ClueGame game = new ClueGame("ourBoardLayout.csv", "ourLegend.csv");
+		game.loadConfigFiles();
+		game.controlGUI= new ControlGUI(game);
+		game.add(game.controlGUI,BorderLayout.SOUTH);
+		
+		
 		Board board = game.getBoard();
 		board.calcAdjacencies();
 		game.deal();
-
+		game.cardDisplay = new CardDisplay(game.humanPlayer.getHand());
+		game.add(game.cardDisplay,BorderLayout.EAST);
+		
 		game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game.setVisible(true);
 		// This will cause rectangle to display in new location

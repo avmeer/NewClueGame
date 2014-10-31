@@ -9,12 +9,16 @@ import javax.swing.border.TitledBorder;
 
 
 public class guessResultPanel extends JPanel {
-
+	private JTextField response;
 	public guessResultPanel(){
 		JLabel guessResult = new JLabel("Response");
-		JTextField response = new JTextField(20);
+		response = new JTextField(20);
 		response.setEditable(false);
 		add(guessResult);
 		add(response);
+	}
+	
+	public void setResponseField(String responseIn) {
+		response.setText(responseIn);
 	}
 }

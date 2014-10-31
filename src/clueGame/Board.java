@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -309,13 +310,12 @@ public class Board extends JPanel implements MouseListener{
 					humanPlayer.setRow(t.getRow());
 					humanPlayer.setCol(t.getColumn());
 					humanPlayerMustFinish=false;
-					System.out.println("Clicked target");
 					unHighlightTargets();
 					this.repaint();
 					return;
 				}
 			}
-			System.out.println("Not a target");
+			JOptionPane.showMessageDialog(this,"This is not a target.");
 		}
 	}
 

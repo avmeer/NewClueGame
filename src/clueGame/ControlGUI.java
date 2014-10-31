@@ -17,8 +17,8 @@ import javax.swing.border.TitledBorder;
 public class ControlGUI extends JPanel {
 	
 	
-    private JTextField whoseTurnField, roll, guess, response;
     private ClueGame game;
+    private JPanel dP,gP,gR,whoseTr;
     
     private class NextPlayerButtonListener implements ActionListener
     {
@@ -41,7 +41,7 @@ public class ControlGUI extends JPanel {
 		
 		setLayout(new GridLayout(2,3));
 		
-		JPanel whoseTr = new whoseTurnPanel();
+		whoseTr = new whoseTurnPanel();
 		add(whoseTr);
 		
 		JButton  nextPlayerButton= new JButton("Next Player");
@@ -52,17 +52,17 @@ public class ControlGUI extends JPanel {
 		add(makeAccusationButton);
 		makeAccusationButton.addActionListener(new makeAccusationButtonLister());
 		
-		JPanel dP = new diePanel();
+		dP = new diePanel();
 		dP.setBorder(new TitledBorder (new EtchedBorder(), "Die"));
 
 		add(dP);
 		
-		JPanel gP = new guessPanel();
+		gP = new guessPanel();
 		gP.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
 
 		add(gP);
 	
-		JPanel gR = new guessResultPanel();
+		gR = new guessResultPanel();
 		gR.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
 
 		add(gR);
@@ -70,46 +70,18 @@ public class ControlGUI extends JPanel {
 		
 	}
 	
-	
-	public JTextField getWhoseTurnField() {
-		return whoseTurnField;
+	public void setWhoseTurn(String playerName){
+		((whoseTurnPanel) whoseTr).setWhoseTurnField(playerName);
 	}
-
-
-	public void setWhoseTurnField(JTextField whoseTurnField) {
-		this.whoseTurnField = whoseTurnField;
+	public void setDieField(String roll){
+		((diePanel) dP).setDieField(roll);
 	}
-
-
-	public JTextField getRoll() {
-		return roll;
+	public void setGuess(String guess){
+		((guessPanel) gP).setGuessField(guess);
 	}
-
-
-	public void setRoll(JTextField roll) {
-		this.roll = roll;
+	public void setGuessResult(String result){
+		((guessResultPanel)gR).setResponseField(result);
 	}
-
-
-	public JTextField getGuess() {
-		return guess;
-	}
-
-
-	public void setGuess(JTextField guess) {
-		this.guess = guess;
-	}
-
-
-	public JTextField getResponse() {
-		return response;
-	}
-
-
-	public void setResponse(JTextField response) {
-		this.response = response;
-	}
-
 
 	public ControlGUI(ClueGame game)
 	{

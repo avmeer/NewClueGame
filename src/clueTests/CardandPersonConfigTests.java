@@ -32,8 +32,10 @@ public class CardandPersonConfigTests {
 		@BeforeClass
 		public static void setup() {
 			game = new ClueGame("ourBoardLayout.csv", "ourLegend.csv");
+			game.loadConfigFiles();
 			board = game.getBoard();
 			board.calcAdjacencies();
+			game.deal();
 		}
 		
 		@Test 

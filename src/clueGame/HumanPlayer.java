@@ -6,8 +6,7 @@ public class HumanPlayer extends Player {
 		// TODO Auto-generated constructor stub
 	}
 	@Override
-	public void makeMove(Board theBoard) {
-		int roll=(int)(Math.random() *5)+1;
+	public void makeMove(Board theBoard,int roll) {
 		theBoard.calcTargets(this.getRow(),this.getCol(), roll);	
 		for(BoardCell t: theBoard.getTargets()){
 			t.setHighlighted(true);

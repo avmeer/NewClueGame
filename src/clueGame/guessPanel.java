@@ -9,13 +9,17 @@ import javax.swing.border.TitledBorder;
 
 
 public class guessPanel extends JPanel {
-	
+	private JTextField guess;
 	public guessPanel(){
 		JPanel Guess = new JPanel();
-		JTextField guess = new JTextField(20);
+		guess = new JTextField(20);
 		JLabel guessResult = new JLabel("Guess");
 		guess.setEditable(false);
 		add(guessResult);
 		add(guess);
+	}
+	
+	public void setGuessField(String guessIn) {
+		guess.setText(guessIn);
 	}
 }
