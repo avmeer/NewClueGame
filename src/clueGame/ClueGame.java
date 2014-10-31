@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,7 +53,7 @@ public class ClueGame extends JFrame {
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
 		seen = new ArrayList<Card>();
-		add(theBoard);
+		add(theBoard,BorderLayout.CENTER);
 		setSize(800, 800);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -272,7 +273,7 @@ public class ClueGame extends JFrame {
 
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
-		JOptionPane.showMessageDialog(game,"You are "+game.getPlayers().get(0).getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
+		//JOptionPane.showMessageDialog(game,"You are "+game.getPlayers().get(0).getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }
