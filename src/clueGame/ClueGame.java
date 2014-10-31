@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
 	private Map<Character,String> rooms;
@@ -271,6 +272,7 @@ public class ClueGame extends JFrame {
 
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
+		JOptionPane.showMessageDialog(game,"You are "+game.getPlayers().get(0).getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }
