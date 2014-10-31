@@ -37,6 +37,8 @@ public class ClueGame extends JFrame {
 	private HumanPlayer humanPlayer;
 	private int currentTurn=0;
 
+	private ControlGUI controlGUI;
+
 	private CardDisplay cardDisplay;
 
 	public ClueGame()
@@ -67,6 +69,9 @@ public class ClueGame extends JFrame {
 		loadConfigFiles();
 		cardDisplay = new CardDisplay(humanPlayer.getHand());
 		add(cardDisplay,BorderLayout.EAST);
+		controlGUI= new ControlGUI(this);
+		add(controlGUI,BorderLayout.SOUTH);
+
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
@@ -262,16 +267,21 @@ public class ClueGame extends JFrame {
 		item.addActionListener(new MenuItemListener());
 		return item;
 	}
-	private void nextPlayer(){
+	public void nextPlayer(){
 		Player currentPlayer=players.get(currentTurn);
-		currentTurn++;
-		if(currentTurn>players.size()){
-			currentTurn=0;
-		}
-		currentPlayer.makeMove(theBoard);
+		if(!theBoard.isHumanPlayerMustFinish()){
+			currentTurn++;
+			if(currentTurn>players.size()){
+				currentTurn=0;
+			}
+			if(currentPlayer==humanPlayer){
+				theBoard.setHumanPlayerMustFinish(true);
+			}
 
-		if(currentPlayer==humanPlayer){
-			
+			currentPlayer.makeMove(theBoard);
+		}
+		else{
+			JOptionPane.showMessageDialog(this,"You must complete your turn");
 		}
 	}
 
@@ -291,7 +301,7 @@ public class ClueGame extends JFrame {
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
-		game.nextPlayer();
+		board.setHumanPlayer(game.humanPlayer);
 	}
 
 }

@@ -29,48 +29,66 @@ public class Board extends JPanel implements MouseListener{
 	private static String layoutFile;
 	private BoardCell[][] board;
 	private Map<Character,String> rooms;
-	
-	
+	private HumanPlayer humanPlayer;
+	private boolean humanPlayerMustFinish=false;
+
+
+	public boolean isHumanPlayerMustFinish() {
+		return humanPlayerMustFinish;
+	}
+
+	public void setHumanPlayerMustFinish(boolean humanPlayerMustFinish) {
+		this.humanPlayerMustFinish = humanPlayerMustFinish;
+	}
+
+	public HumanPlayer getHumanPlayer() {
+		return humanPlayer;
+	}
+
+	public void setHumanPlayer(HumanPlayer humanPlayer) {
+		this.humanPlayer = humanPlayer;
+	}
+
 	int numRows;
 	int numColumns;
-	
-	
+
+
 
 	public Board(String lF) {
 		layoutFile = lF;
 		targets = new HashSet<BoardCell>();
 		addMouseListener(this);
 	}
-		
+
 	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException{
-		
+
 		ArrayList<ArrayList<String>> tempBoard = new ArrayList<ArrayList<String>>();
 		Scanner boardRead = new Scanner( new FileReader(layoutFile));
-		
+
 		numRows = 0;
 		while(boardRead.hasNextLine()) {
-			
+
 			tempBoard.add(new ArrayList<String>());
 			String readLine = boardRead.nextLine();
 			String[] letters = readLine.split(",");
-			
+
 			for(int i = 0; i < letters.length; i++) {
 				tempBoard.get(numRows).add(letters[i]);
 			}
-			
+
 			if(numColumns != 0 && numColumns != letters.length){
 				boardRead.close();
 				throw new BadConfigFormatException("Row lengths are inconsistant in layout config file.");
 			} else {
 				numColumns = letters.length;
 			}
-			
+
 			numRows++;
 		}
 		boardRead.close();
-		
+
 		board = new BoardCell[numRows][numColumns];
-		
+
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
 				if(i > tempBoard.size()) {
@@ -82,7 +100,7 @@ public class Board extends JPanel implements MouseListener{
 				if(!rooms.containsKey(tempBoard.get(i).get(j).charAt(0))) {
 					throw new BadConfigFormatException("Found undefined key in layout file");
 				}
-				
+
 				switch(tempBoard.get(i).get(j)) {
 				case "W":
 					board[i][j] = new WalkwayCell(i, j);
@@ -93,11 +111,11 @@ public class Board extends JPanel implements MouseListener{
 				}
 			}
 		}
-		
+
 
 	}
 
-	
+
 	public void setRooms(Map<Character,String> inRooms) throws BadConfigFormatException {
 		rooms = new HashMap<Character,String>();
 		if(inRooms == null){
@@ -106,7 +124,7 @@ public class Board extends JPanel implements MouseListener{
 			rooms = inRooms;
 		}
 	}
-	
+
 	public BoardCell[][] getBoard() {
 		return board;
 	}
@@ -122,15 +140,15 @@ public class Board extends JPanel implements MouseListener{
 	public int getNumColumns() {
 		return numColumns;
 	}
-	
+
 	public RoomCell getRoomCellAt(int r, int c) {
 		return (RoomCell) board[r][c];
 	}
-	
+
 	public BoardCell getCellAt(int r, int c) {
 		return board[r][c];
 	}
-	
+
 
 	public WalkwayCell getWalkwayCellAt(int r, int c) {
 		return (WalkwayCell) board[r][c];
@@ -150,8 +168,8 @@ public class Board extends JPanel implements MouseListener{
 				if(j<numColumns-1)
 					Right=board[i][j+1];
 				Current=board[i][j];
-				
-				
+
+
 				LinkedList<BoardCell> adjList = new LinkedList<BoardCell>();
 				if(Current.isDoorway()){
 					switch(((RoomCell) Current).getDoorDirection()) {
@@ -200,14 +218,14 @@ public class Board extends JPanel implements MouseListener{
 						}
 					}
 				} else {
-					
+
 				}
 				adjMtx.put(Current, adjList);
 			}
 		}
-				
+
 	}
-	
+
 	public void calcTargets(int row, int col, int steps) {
 		targets.clear();
 		current = board[row][col];
@@ -217,7 +235,7 @@ public class Board extends JPanel implements MouseListener{
 		}
 
 	}
-	
+
 	public void targetHelper(int row, int col, int steps) {
 		if(steps == 0) {
 			if (!targets.contains(board[row][col])) {
@@ -237,30 +255,30 @@ public class Board extends JPanel implements MouseListener{
 				visited.remove(cell);
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	public Set<BoardCell> getTargets() {
 		targets.remove(current);
 		return targets;
 	}
-	
+
 	public LinkedList<BoardCell> getAdjList(int row, int col) {
 		return adjMtx.get(board[row][col]);
 	}
-	
+
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawBoardCells(g);
 		drawPlayers(g);
 	}
-	
+
 	public void drawPlayers(Graphics g){
 		for(Player player : players) {
 			player.draw(g);
@@ -273,42 +291,58 @@ public class Board extends JPanel implements MouseListener{
 			}
 		}
 	}
-	
-	public void mousePressed(MouseEvent e)  {
-		
+	public void highlightTargets(){
 		for(BoardCell t: targets){
-			if (t.containsClick(e.getX(), e.getY())) {
-				System.out.println("Clicked target");
-				return;
-			}
+			t.setHighlighted(true);
 		}
-		System.out.println("Not a target");
+	}
+	public void unHighlightTargets(){
+		for(BoardCell t: targets){
+			t.setHighlighted(false);
+		}
+	}
+
+	public void mousePressed(MouseEvent e)  {
+		if(humanPlayerMustFinish){
+			for(BoardCell t: targets){
+				if (t.containsClick(e.getX(), e.getY())) {
+					humanPlayer.setRow(t.getRow());
+					humanPlayer.setCol(t.getColumn());
+					humanPlayerMustFinish=false;
+					System.out.println("Clicked target");
+					unHighlightTargets();
+					this.repaint();
+					return;
+				}
+			}
+			System.out.println("Not a target");
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
-	
+
 }
