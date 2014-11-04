@@ -301,6 +301,9 @@ public class ClueGame extends JFrame {
 	}
 	public void finishTurn(){
 		theBoard.setHumanPlayerMustFinish(false);
+		for(BoardCell t: theBoard.getTargets()){
+			t.setHighlighted(false);
+		}
 		currentTurn++;
 	}
 
