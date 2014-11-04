@@ -294,8 +294,14 @@ public class ClueGame extends JFrame {
 	}
 	
 	public void makeAccusation(){
-		accusationPanel= new MakeAccusation(getDeck());
-		accusationPanel.setVisible(true);
+		if(theBoard.isHumanPlayerMustFinish()){
+			accusationPanel= new MakeAccusation(getDeck(),this);
+			accusationPanel.setVisible(true);
+		}
+	}
+	public void finishTurn(){
+		theBoard.setHumanPlayerMustFinish(false);
+		currentTurn++;
 	}
 
 	public static void main(String[] args) {

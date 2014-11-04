@@ -23,10 +23,17 @@ public class MakeAccusation extends JFrame {
 	private ArrayList<String> rooms = new ArrayList<String>();
 	private ArrayList<String> weapons = new ArrayList<String>();
 	
+	 private ClueGame game;
+	
+	public boolean accusationMade=false;
+	
 	private class submitListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			accusationMade=true;
+			setVisible(false);
+			game.finishTurn();
 			System.out.println("Button pressed");
 		}
 	}
@@ -103,11 +110,11 @@ public class MakeAccusation extends JFrame {
 	
 	
 	
-	public MakeAccusation(ArrayList<Card> deck){
+	public MakeAccusation(ArrayList<Card> deck,ClueGame game){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Make An Accusation");
 		setSize(300, 300);
-		
+		this.game=game;
 		
 		for (Card card : deck) {
 			CardType type = card.type;
