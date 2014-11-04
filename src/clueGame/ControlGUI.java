@@ -32,7 +32,7 @@ public class ControlGUI extends JPanel {
     {
     	public void actionPerformed(ActionEvent e)
     	{
-    		//TODO
+    		game.makeAccusation();
     	}
     }
     

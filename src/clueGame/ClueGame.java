@@ -41,6 +41,8 @@ public class ClueGame extends JFrame {
 	private ControlGUI controlGUI;
 
 	private CardDisplay cardDisplay;
+	
+	private MakeAccusation accusationPanel;
 
 	public ClueGame()
 	{
@@ -67,7 +69,6 @@ public class ClueGame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
-		
 
 	}
 
@@ -291,6 +292,11 @@ public class ClueGame extends JFrame {
 			JOptionPane.showMessageDialog(this,"You must complete your turn");
 		}
 	}
+	
+	public void makeAccusation(){
+		accusationPanel= new MakeAccusation(getDeck());
+		accusationPanel.setVisible(true);
+	}
 
 	public static void main(String[] args) {
 
@@ -311,11 +317,13 @@ public class ClueGame extends JFrame {
 		// This will cause rectangle to display in new location
 		board.setPlayers(game.getPlayers());
 		board.repaint();
-
+		
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 		board.setHumanPlayer(game.humanPlayer);
+		
+		
 	}
 
 }
