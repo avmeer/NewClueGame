@@ -47,23 +47,33 @@ public class ComputerPlayer extends Player {
 		String person = null;
 		String room = null;
 		String weapon = null;
+		System.out.println(deck.size());
 		//Select randomly from cards we have not seen
-		while(person == null && weapon == null) {
+		while(person == null) {
 			Card card = deck.get(random);
+			System.out.println(card.name);
+			System.out.println(card.type);
 			//Find the guess for person
 			if (person == null && card.type == CardType.PERSON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
 					person = card.name;
 				}
 			} 
+			random = (int)(Math.random() * (deck.size()));
+		}
+		while( weapon == null){
+			Card card = deck.get(random);
+			System.out.println(card.name);
+			System.out.println(card.type);
 			//Find guess for weapon
-			else if (weapon == null && card.type == CardType.WEAPON) {
+			if (weapon == null && card.type == CardType.WEAPON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
 					weapon = card.name;
 				}
 			}
-			random = (int)(Math.random() * (deck.size() + 1));
+			random = (int)(Math.random() * (deck.size()));
 		}
+		
 		//Set last visited room
 		room = legend.get(lastRoomVisited);
 		return new Solution(person, weapon, room);
@@ -78,9 +88,14 @@ public class ComputerPlayer extends Player {
 	}
 
 	@Override
-	public void makeMove(Board theBoard,int roll) {
+	public void makeMove(ClueGame game, Board theBoard,int roll) {
 		theBoard.calcTargets(this.getRow(),this.getCol(), roll);
 		BoardCell target=pickLocation(theBoard.getTargets());
+		if(target.isDoorway()){
+			Solution suggestion=createSuggestion(game.getSeen(),game.getDeck(),game.getLegend());
+			game.setGuess(suggestion.person+" "+ suggestion.room+ " " +suggestion.weapon);
+			game.handleSuggestion(this, suggestion.person, suggestion.room, suggestion.weapon);
+		}
 		this.setRow(target.getRow());
 		this.setCol(target.getColumn());
 		theBoard.repaint();

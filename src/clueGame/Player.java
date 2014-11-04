@@ -48,7 +48,7 @@ public abstract class Player {
 	public void dealCard(Card card) {
 		hand.add(card);
 	}
-	public abstract void makeMove(Board theBoard,int roll);
+	public abstract void makeMove(ClueGame game,Board theBoard,int roll);
 	
 	public String getName() {
 		return name;

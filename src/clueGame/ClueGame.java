@@ -185,13 +185,17 @@ public class ClueGame extends JFrame {
 		for(int i = players.indexOf(suggestee) + 1; i < players.indexOf(suggestee) + players.size(); i++) {
 			Card disprove = players.get(i % players.size()).disproveSuggestion(person, room, weapon);
 			if (disprove != null) {
+				if(controlGUI!=null)
+					controlGUI.setGuessResult(disprove.name);
 				return disprove;
 			}
 		}
-
 		//No one can disprove so return null
 		return null;
 
+	}
+	public void setGuess(String guess){
+		controlGUI.setGuess(guess);
 	}
 
 	public void seenCard(Card card) {
@@ -268,6 +272,10 @@ public class ClueGame extends JFrame {
 		Player currentPlayer=players.get(currentTurn);
 		controlGUI.setWhoseTurn(currentPlayer.getName());
 		if(!theBoard.isHumanPlayerMustFinish()){
+			//clear Guess panel
+			controlGUI.setGuess("");
+			controlGUI.setGuessResult("");
+			
 			currentTurn++;
 			if(currentTurn>players.size()-1){
 				currentTurn=0;
@@ -276,9 +284,8 @@ public class ClueGame extends JFrame {
 				theBoard.setHumanPlayerMustFinish(true);
 			}
 			int roll=(int)(Math.random() *5)+1;
-			currentPlayer.makeMove(theBoard,roll);
+			currentPlayer.makeMove(this,theBoard,roll);
 			controlGUI.setDieField(Integer.toString(roll));
-			
 		}
 		else{
 			JOptionPane.showMessageDialog(this,"You must complete your turn");
