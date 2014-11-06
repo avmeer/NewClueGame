@@ -306,15 +306,14 @@ public class ClueGame extends JFrame {
 	public void finishTurn(){
 		if(theBoard.isHumanPlayerMustFinish()){
 			theBoard.setHumanPlayerMustFinish(false);
-			for(BoardCell t: theBoard.getTargets()){
-				t.setHighlighted(false);
-				if(checkAccusation(accusationPanel.getAccusation())){
-					JOptionPane.showMessageDialog(this,"Correct Accusation!");
-				}
-				else{
-					JOptionPane.showMessageDialog(this,"Incorrect Accusation!");
-				}
+			theBoard.unHighlightTargets();
+			if(checkAccusation(accusationPanel.getAccusation())){
+				JOptionPane.showMessageDialog(this,"Correct Accusation!");
 			}
+			else{
+				JOptionPane.showMessageDialog(this,"Incorrect Accusation!");
+			}
+			
 			currentTurn++;
 		}
 	}
