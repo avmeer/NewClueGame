@@ -41,7 +41,7 @@ public class ClueGame extends JFrame {
 	private ControlGUI controlGUI;
 
 	private CardDisplay cardDisplay;
-	
+
 	private MakeAccusation accusationPanel;
 
 	public ClueGame()
@@ -271,12 +271,13 @@ public class ClueGame extends JFrame {
 	}
 	public void nextPlayer(){
 		Player currentPlayer=players.get(currentTurn);
-		controlGUI.setWhoseTurn(currentPlayer.getName());
 		if(!theBoard.isHumanPlayerMustFinish()){
+			controlGUI.setWhoseTurn(currentPlayer.getName());
+
 			//clear Guess panel
 			controlGUI.setGuess("");
 			controlGUI.setGuessResult("");
-			
+
 			currentTurn++;
 			if(currentTurn>players.size()-1){
 				currentTurn=0;
@@ -292,19 +293,30 @@ public class ClueGame extends JFrame {
 			JOptionPane.showMessageDialog(this,"You must complete your turn");
 		}
 	}
-	
+
 	public void makeAccusation(){
 		if(theBoard.isHumanPlayerMustFinish()){
 			accusationPanel= new MakeAccusation(getDeck(),this);
 			accusationPanel.setVisible(true);
 		}
+		else{
+			JOptionPane.showMessageDialog(this,"It is not your turn!");
+		}
 	}
 	public void finishTurn(){
-		theBoard.setHumanPlayerMustFinish(false);
-		for(BoardCell t: theBoard.getTargets()){
-			t.setHighlighted(false);
+		if(theBoard.isHumanPlayerMustFinish()){
+			theBoard.setHumanPlayerMustFinish(false);
+			for(BoardCell t: theBoard.getTargets()){
+				t.setHighlighted(false);
+				if(checkAccusation(accusationPanel.getAccusation())){
+					JOptionPane.showMessageDialog(this,"Correct Accusation!");
+				}
+				else{
+					JOptionPane.showMessageDialog(this,"Incorrect Accusation!");
+				}
+			}
+			currentTurn++;
 		}
-		currentTurn++;
 	}
 
 	public static void main(String[] args) {
@@ -313,26 +325,26 @@ public class ClueGame extends JFrame {
 		game.loadConfigFiles();
 		game.controlGUI= new ControlGUI(game);
 		game.add(game.controlGUI,BorderLayout.SOUTH);
-		
-		
+
+
 		Board board = game.getBoard();
 		board.calcAdjacencies();
 		game.deal();
 		game.cardDisplay = new CardDisplay(game.humanPlayer.getHand());
 		game.add(game.cardDisplay,BorderLayout.EAST);
-		
+
 		game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game.setVisible(true);
 		// This will cause rectangle to display in new location
 		board.setPlayers(game.getPlayers());
 		board.repaint();
-		
+
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 		board.setHumanPlayer(game.humanPlayer);
-		
-		
+
+
 	}
 
 }

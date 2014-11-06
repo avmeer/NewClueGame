@@ -22,19 +22,20 @@ public class MakeAccusation extends JFrame {
 	private ArrayList<String> people = new ArrayList<String>();
 	private ArrayList<String> rooms = new ArrayList<String>();
 	private ArrayList<String> weapons = new ArrayList<String>();
-	
-	 private ClueGame game;
-	
-	public boolean accusationMade=false;
-	
+
+	private JComboBox<String> peopleCombo;
+	private JComboBox<String> weaponCombo;
+	private JComboBox<String> roomCombo;
+
+	private ClueGame game;
+
+
 	private class submitListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			accusationMade=true;
-			setVisible(false);
-			game.finishTurn();
-			System.out.println("Button pressed");
+				setVisible(false);
+				game.finishTurn();
 		}
 	}
 
@@ -42,42 +43,45 @@ public class MakeAccusation extends JFrame {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("Button pressed");
+			setVisible(false);
 		}
 	}
 
-	
-	
-	
+
+
+
 	private void createLayout(){
-		
+
 		setLayout(new GridLayout(4, 2));
-	
+
 		JLabel roomLabel = new JLabel("Your room");
 		add(roomLabel);
-		add(drawRoomCombo(rooms));
-		
+		roomCombo=drawRoomCombo(rooms);
+		add(roomCombo);
+
 		JLabel personLabel = new JLabel("Person");
 		add(personLabel);
-		add(drawPeopleCombo(people));
-		
+		peopleCombo=drawPeopleCombo(people);
+		add(peopleCombo);
+
 		JLabel weaponLabel = new JLabel("Weapon");
 		add(weaponLabel);
-		add(drawWeaponCombo(weapons));
-		
+		weaponCombo=drawWeaponCombo(weapons);
+		add(weaponCombo);
+
 		JButton submitButton = new JButton("Submit");
 		submitButton.addActionListener(new submitListener());
 		add(submitButton);
-		
+
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new cancelListener());
 		add(cancelButton);
 
 	}
-	
+
 	public JComboBox<String> drawPeopleCombo(ArrayList<String> people)	{
 		JComboBox<String> combo = new JComboBox<String>();
-		
+
 		for (String name : people) {
 
 			combo.addItem(name);
@@ -85,10 +89,10 @@ public class MakeAccusation extends JFrame {
 		return combo;
 
 	}
-	
+
 	public JComboBox<String> drawWeaponCombo(ArrayList<String> weapons)	{
 		JComboBox<String> combo = new JComboBox<String>();
-		
+
 		for (String name : weapons) {
 
 			combo.addItem(name);
@@ -96,10 +100,10 @@ public class MakeAccusation extends JFrame {
 		return combo;
 
 	}
-	
+
 	public JComboBox<String> drawRoomCombo(ArrayList<String> rooms)	{
 		JComboBox<String> combo = new JComboBox<String>();
-		
+
 		for (String name : rooms) {
 
 			combo.addItem(name);
@@ -107,27 +111,35 @@ public class MakeAccusation extends JFrame {
 		return combo;
 
 	}
-	
-	
-	
+
+	public Solution getAccusation(){
+		String weapon=(String)weaponCombo.getSelectedItem();
+		String person=(String)peopleCombo.getSelectedItem();
+		String room=(String)roomCombo.getSelectedItem();
+
+		Solution accusation = new Solution(person, weapon, room);
+		return accusation;
+	}
+
+
+
 	public MakeAccusation(ArrayList<Card> deck,ClueGame game){
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Make An Accusation");
 		setSize(300, 300);
 		this.game=game;
-		
+
 		for (Card card : deck) {
 			CardType type = card.type;
 			switch (type) {
-				case WEAPON: weapons.add(card.name);
-					break;
-				case PERSON:  people.add(card.name);
-					break;
-				case ROOM: rooms.add(card.name);
-					break;
+			case WEAPON: weapons.add(card.name);
+			break;
+			case PERSON:  people.add(card.name);
+			break;
+			case ROOM: rooms.add(card.name);
+			break;
 			}
 		}
-		
+
 		createLayout();
 	}
 

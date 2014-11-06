@@ -47,12 +47,9 @@ public class ComputerPlayer extends Player {
 		String person = null;
 		String room = null;
 		String weapon = null;
-		System.out.println(deck.size());
 		//Select randomly from cards we have not seen
 		while(person == null) {
 			Card card = deck.get(random);
-			System.out.println(card.name);
-			System.out.println(card.type);
 			//Find the guess for person
 			if (person == null && card.type == CardType.PERSON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
@@ -63,8 +60,7 @@ public class ComputerPlayer extends Player {
 		}
 		while( weapon == null){
 			Card card = deck.get(random);
-			System.out.println(card.name);
-			System.out.println(card.type);
+
 			//Find guess for weapon
 			if (weapon == null && card.type == CardType.WEAPON) {
 				if (!seen.contains(card) && !hand.contains(card)) {
