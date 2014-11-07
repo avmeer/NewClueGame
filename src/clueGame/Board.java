@@ -32,6 +32,7 @@ public class Board extends JPanel implements MouseListener{
 	private Map<Character,String> rooms;
 	private HumanPlayer humanPlayer;
 	private boolean humanPlayerMustFinish=false;
+	private ClueGame theGame;
 
 
 	public boolean isHumanPlayerMustFinish() {
@@ -57,6 +58,13 @@ public class Board extends JPanel implements MouseListener{
 
 	public Board(String lF) {
 		layoutFile = lF;
+		targets = new HashSet<BoardCell>();
+		addMouseListener(this);
+	}
+	
+	public Board(String lF, ClueGame game) {
+		layoutFile = lF;
+		theGame=game;
 		targets = new HashSet<BoardCell>();
 		addMouseListener(this);
 	}
@@ -310,6 +318,11 @@ public class Board extends JPanel implements MouseListener{
 					humanPlayer.setRow(t.getRow());
 					humanPlayer.setCol(t.getColumn());
 					humanPlayerMustFinish=false;
+					if(t.isDoorway()){
+						RoomCell tempCell = (RoomCell)t;
+						String roomName = theGame.getLegend().get(tempCell.getInitial());
+						theGame.makeSuggestion(roomName);
+					}
 					unHighlightTargets();
 					this.repaint();
 					return;

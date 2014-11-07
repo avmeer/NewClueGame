@@ -43,6 +43,8 @@ public class ClueGame extends JFrame {
 	private CardDisplay cardDisplay;
 
 	private MakeAccusation accusationPanel;
+	
+	private MakeSuggestion suggestionPanel;
 
 	public ClueGame()
 	{
@@ -60,7 +62,7 @@ public class ClueGame extends JFrame {
 		configFile = legend;
 		playerConfigFile = playerConfig;
 		deckConfigFile = deckConfig;
-		theBoard = new Board(layout);
+		theBoard = new Board(layout, this);
 		players = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
 		seen = new ArrayList<Card>();
@@ -172,13 +174,14 @@ public class ClueGame extends JFrame {
 
 	public void deal(){
 		HashSet<Integer> dealt = new HashSet<Integer>();
-		int random = (int)(Math.random()*21);
+		int random = (int)(Math.random()*deck.size());
 		for(int i = 0; i < deck.size(); i++) {
 			while (dealt.contains(random)) {
-				random = (int)(Math.random()*21);
+				random = (int)(Math.random()*deck.size());
 			}
 			dealt.add(random);
-			players.get(i % players.size()).dealCard(deck.get(random));
+			if(!(deck.get(random).name.equals(solution.person)||deck.get(random).name.equals(solution.weapon)||deck.get(random).name.equals(solution.room)))
+				players.get(i % players.size()).dealCard(deck.get(random));
 		}
 	}
 
@@ -188,6 +191,9 @@ public class ClueGame extends JFrame {
 			if (disprove != null) {
 				if(controlGUI!=null)
 					controlGUI.setGuessResult(disprove.name);
+				if(!seen.contains(disprove)){
+					seen.add(disprove);
+				}
 				return disprove;
 			}
 		}
@@ -303,12 +309,23 @@ public class ClueGame extends JFrame {
 			JOptionPane.showMessageDialog(this,"It is not your turn!");
 		}
 	}
-	public void finishTurn(){
+	public void makeSuggestion(String currentRoom){
+		suggestionPanel= new MakeSuggestion(currentRoom,deck,this);
+		suggestionPanel.setVisible(true);
+	}
+	
+	public void finishSuggestion(){
+			Solution tempSuggestion = suggestionPanel.getSuggestion();
+			Card tempCard = handleSuggestion(humanPlayer, tempSuggestion.person,  tempSuggestion.room,tempSuggestion.weapon);
+			setGuess(tempSuggestion.person+" "+ tempSuggestion.room+ " " +tempSuggestion.weapon);
+	}
+	
+	public void finishAccusation(){
 		if(theBoard.isHumanPlayerMustFinish()){
 			theBoard.setHumanPlayerMustFinish(false);
 			theBoard.unHighlightTargets();
 			if(checkAccusation(accusationPanel.getAccusation())){
-				JOptionPane.showMessageDialog(this,"Correct Accusation!");
+				JOptionPane.showMessageDialog(this,"Correct Accusation! You win!");
 			}
 			else{
 				JOptionPane.showMessageDialog(this,"Incorrect Accusation!");
@@ -316,6 +333,44 @@ public class ClueGame extends JFrame {
 			
 			currentTurn++;
 		}
+	}
+	
+	
+	public void createSolution () {
+		int random = (int)(Math.random() * deck.size());
+		String person = null;
+		String room = null;
+		String weapon = null;
+		//Select randomly from cards 
+		while(person == null) {
+			Card card = deck.get(random);
+			//Find the guess for person
+			if (person == null && card.type == CardType.PERSON) {
+					person = card.name;
+			} 
+			random = (int)(Math.random() * (deck.size()));
+		}
+		while( weapon == null){
+			Card card = deck.get(random);
+
+			//Find guess for weapon
+			if (weapon == null && card.type == CardType.WEAPON) {
+					weapon = card.name;
+			}
+			random = (int)(Math.random() * (deck.size()));
+		}
+		
+		while( room == null){
+			Card card = deck.get(random);
+
+			//Find guess for weapon
+			if (room == null && card.type == CardType.ROOM) {
+					room = card.name;
+			}
+			random = (int)(Math.random() * (deck.size()));
+		}
+		solution=new Solution(person,weapon,room);
+		
 	}
 
 	public static void main(String[] args) {
@@ -328,6 +383,7 @@ public class ClueGame extends JFrame {
 
 		Board board = game.getBoard();
 		board.calcAdjacencies();
+		game.createSolution();
 		game.deal();
 		game.cardDisplay = new CardDisplay(game.humanPlayer.getHand());
 		game.add(game.cardDisplay,BorderLayout.EAST);
@@ -342,8 +398,7 @@ public class ClueGame extends JFrame {
 		game.getNotes().setVisible(false);
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 		board.setHumanPlayer(game.humanPlayer);
-
-
+	
 	}
 
 }

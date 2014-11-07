@@ -18,7 +18,7 @@ import clueGame.Card;
 import clueGame.CardType;
 
 
-public class MakeAccusation extends JFrame {
+public class MakeSuggestion extends JFrame {
 	private ArrayList<String> people = new ArrayList<String>();
 	private ArrayList<String> rooms = new ArrayList<String>();
 	private ArrayList<String> weapons = new ArrayList<String>();
@@ -26,6 +26,8 @@ public class MakeAccusation extends JFrame {
 	private JComboBox<String> peopleCombo;
 	private JComboBox<String> weaponCombo;
 	private JComboBox<String> roomCombo;
+	
+	private String roomName;
 
 	private ClueGame game;
 
@@ -35,7 +37,7 @@ public class MakeAccusation extends JFrame {
 		public void actionPerformed(ActionEvent e)
 		{
 				setVisible(false);
-				game.finishAccusation();
+				game.finishSuggestion();
 		}
 	}
 
@@ -56,8 +58,7 @@ public class MakeAccusation extends JFrame {
 
 		JLabel roomLabel = new JLabel("Your room");
 		add(roomLabel);
-		roomCombo=drawRoomCombo(rooms);
-		add(roomCombo);
+		add(new JLabel(roomName));
 
 		JLabel personLabel = new JLabel("Person");
 		add(personLabel);
@@ -112,10 +113,10 @@ public class MakeAccusation extends JFrame {
 
 	}
 
-	public Solution getAccusation(){
+	public Solution getSuggestion(){
 		String weapon=(String)weaponCombo.getSelectedItem();
 		String person=(String)peopleCombo.getSelectedItem();
-		String room=(String)roomCombo.getSelectedItem();
+		String room= roomName;
 
 		Solution accusation = new Solution(person, weapon, room);
 		return accusation;
@@ -123,10 +124,11 @@ public class MakeAccusation extends JFrame {
 
 
 
-	public MakeAccusation(ArrayList<Card> deck,ClueGame game){
-		setTitle("Make An Accusation");
+	public MakeSuggestion(String currentRoom, ArrayList<Card> deck,ClueGame game){
+		setTitle("Make a Suggestion");
 		setSize(300, 300);
 		this.game=game;
+		roomName=currentRoom;
 
 		for (Card card : deck) {
 			CardType type = card.type;

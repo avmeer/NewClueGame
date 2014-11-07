@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 public class ComputerPlayer extends Player {
 	public ComputerPlayer(String name, String color, int row, int col) {
 		super(name, color, row, col);
@@ -11,6 +13,9 @@ public class ComputerPlayer extends Player {
 	}
 
 	private char lastRoomVisited;
+	
+	private boolean makeAccusation=false;
+	private Solution answer;
 
 	public BoardCell pickLocation (Set<BoardCell> targets) {
 		ArrayList<BoardCell> roomCells = new ArrayList<BoardCell>();
@@ -85,13 +90,32 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public void makeMove(ClueGame game, Board theBoard,int roll) {
+		Solution suggestion;
+		
+		if(makeAccusation){
+			if(game.checkAccusation(answer)){
+
+				JOptionPane.showMessageDialog(game,this.getName()+"  wins!");
+			}
+		}
+		
 		theBoard.calcTargets(this.getRow(),this.getCol(), roll);
 		BoardCell target=pickLocation(theBoard.getTargets());
+		
 		if(target.isDoorway()){
-			Solution suggestion=createSuggestion(game.getSeen(),game.getDeck(),game.getLegend());
+			Card tempCard = null;
+			suggestion=createSuggestion(game.getSeen(),game.getDeck(),game.getLegend());
 			game.setGuess(suggestion.person+" "+ suggestion.room+ " " +suggestion.weapon);
-			game.handleSuggestion(this, suggestion.person, suggestion.room, suggestion.weapon);
+			
+			
+			tempCard=game.handleSuggestion(this, suggestion.person, suggestion.room, suggestion.weapon);
+			if(tempCard==null){
+				answer=suggestion;
+				makeAccusation=true;
+			}
 		}
+		
+		
 		this.setRow(target.getRow());
 		this.setCol(target.getColumn());
 		theBoard.repaint();
