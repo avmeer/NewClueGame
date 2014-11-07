@@ -32,7 +32,7 @@ public class ClueGame extends JFrame {
 	private ArrayList<Player> players;
 	private ArrayList<Card> deck;
 	private ArrayList<Card> seen;
-	private Solution solution;
+	private Solution solution = null;
 	public static final int CELL_SIZE = 26;
 	private DetectiveNotes dN;
 	private HumanPlayer humanPlayer;
@@ -43,7 +43,7 @@ public class ClueGame extends JFrame {
 	private CardDisplay cardDisplay;
 
 	private MakeAccusation accusationPanel;
-	
+
 	private MakeSuggestion suggestionPanel;
 
 	public ClueGame()
@@ -180,8 +180,13 @@ public class ClueGame extends JFrame {
 				random = (int)(Math.random()*deck.size());
 			}
 			dealt.add(random);
-			if(!(deck.get(random).name.equals(solution.person)||deck.get(random).name.equals(solution.weapon)||deck.get(random).name.equals(solution.room)))
+			if(solution!=null){
+				if(!(deck.get(random).name.equals(solution.person)||deck.get(random).name.equals(solution.weapon)||deck.get(random).name.equals(solution.room)))
+					players.get(i % players.size()).dealCard(deck.get(random));
+			}
+			else{
 				players.get(i % players.size()).dealCard(deck.get(random));
+			}
 		}
 	}
 
@@ -289,7 +294,7 @@ public class ClueGame extends JFrame {
 				currentTurn=0;
 			}
 			if(currentPlayer==humanPlayer){
-				theBoard.setHumanPlayerMustFinish(true);
+				//theBoard.setHumanPlayerMustFinish(true);
 			}
 			int roll=(int)(Math.random() *5)+1;
 			currentPlayer.makeMove(this,theBoard,roll);
@@ -313,13 +318,13 @@ public class ClueGame extends JFrame {
 		suggestionPanel= new MakeSuggestion(currentRoom,deck,this);
 		suggestionPanel.setVisible(true);
 	}
-	
+
 	public void finishSuggestion(){
-			Solution tempSuggestion = suggestionPanel.getSuggestion();
-			Card tempCard = handleSuggestion(humanPlayer, tempSuggestion.person,  tempSuggestion.room,tempSuggestion.weapon);
-			setGuess(tempSuggestion.person+" "+ tempSuggestion.room+ " " +tempSuggestion.weapon);
+		Solution tempSuggestion = suggestionPanel.getSuggestion();
+		Card tempCard = handleSuggestion(humanPlayer, tempSuggestion.person,  tempSuggestion.room,tempSuggestion.weapon);
+		setGuess(tempSuggestion.person+" "+ tempSuggestion.room+ " " +tempSuggestion.weapon);
 	}
-	
+
 	public void finishAccusation(){
 		if(theBoard.isHumanPlayerMustFinish()){
 			theBoard.setHumanPlayerMustFinish(false);
@@ -330,12 +335,12 @@ public class ClueGame extends JFrame {
 			else{
 				JOptionPane.showMessageDialog(this,"Incorrect Accusation!");
 			}
-			
+
 			currentTurn++;
 		}
 	}
-	
-	
+
+
 	public void createSolution () {
 		int random = (int)(Math.random() * deck.size());
 		String person = null;
@@ -346,7 +351,7 @@ public class ClueGame extends JFrame {
 			Card card = deck.get(random);
 			//Find the guess for person
 			if (person == null && card.type == CardType.PERSON) {
-					person = card.name;
+				person = card.name;
 			} 
 			random = (int)(Math.random() * (deck.size()));
 		}
@@ -355,22 +360,22 @@ public class ClueGame extends JFrame {
 
 			//Find guess for weapon
 			if (weapon == null && card.type == CardType.WEAPON) {
-					weapon = card.name;
+				weapon = card.name;
 			}
 			random = (int)(Math.random() * (deck.size()));
 		}
-		
+
 		while( room == null){
 			Card card = deck.get(random);
 
 			//Find guess for weapon
 			if (room == null && card.type == CardType.ROOM) {
-					room = card.name;
+				room = card.name;
 			}
 			random = (int)(Math.random() * (deck.size()));
 		}
 		solution=new Solution(person,weapon,room);
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -398,7 +403,6 @@ public class ClueGame extends JFrame {
 		game.getNotes().setVisible(false);
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 		board.setHumanPlayer(game.humanPlayer);
-	
 	}
 
 }
