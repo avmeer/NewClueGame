@@ -304,11 +304,13 @@ public class Board extends JPanel implements MouseListener{
 		for(BoardCell t: targets){
 			t.setHighlighted(true);
 		}
+		this.repaint();
 	}
 	public void unHighlightTargets(){
 		for(BoardCell t: targets){
 			t.setHighlighted(false);
 		}
+		this.repaint();
 	}
 
 	public void mousePressed(MouseEvent e)  {

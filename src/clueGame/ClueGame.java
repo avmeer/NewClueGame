@@ -202,6 +202,7 @@ public class ClueGame extends JFrame {
 				return disprove;
 			}
 		}
+		controlGUI.setGuessResult("No new clue");
 		//No one can disprove so return null
 		return null;
 
@@ -294,7 +295,7 @@ public class ClueGame extends JFrame {
 				currentTurn=0;
 			}
 			if(currentPlayer==humanPlayer){
-				//theBoard.setHumanPlayerMustFinish(true);
+				theBoard.setHumanPlayerMustFinish(true);
 			}
 			int roll=(int)(Math.random() *5)+1;
 			currentPlayer.makeMove(this,theBoard,roll);
