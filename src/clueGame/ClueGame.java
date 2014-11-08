@@ -442,7 +442,6 @@ public class ClueGame extends JFrame  implements ComponentListener  {
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		System.out.println("Resized");
 		int horizontalSize,verticalSize;
 		horizontalSize=(getWidth()-cardDisplay.getWidth())/(theBoard.getNumColumns()+1);
 		verticalSize=(this.getHeight()-controlGUI.getHeight())/(theBoard.getNumRows()+2);
