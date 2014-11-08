@@ -198,6 +198,16 @@ public class ClueGame extends JFrame  implements ComponentListener  {
 	}
 
 	public Card handleSuggestion(Player suggestee, String person, String room, String weapon) {
+		
+		for(Player p: players){
+			if(p.getName().equalsIgnoreCase(person)){
+				p.setCol(suggestee.getCol());
+				p.setRow(suggestee.getRow());
+				repaint();
+			}
+		}
+		
+		
 		for(int i = players.indexOf(suggestee) + 1; i < players.indexOf(suggestee) + players.size(); i++) {
 			Card disprove = players.get(i % players.size()).disproveSuggestion(person, room, weapon);
 			if (disprove != null) {
@@ -209,6 +219,8 @@ public class ClueGame extends JFrame  implements ComponentListener  {
 				return disprove;
 			}
 		}
+		
+		
 		if(controlGUI!=null)
 			controlGUI.setGuessResult("No new clue");
 		//No one can disprove so return null

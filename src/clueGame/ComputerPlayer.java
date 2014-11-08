@@ -92,6 +92,7 @@ public class ComputerPlayer extends Player {
 	public void makeMove(ClueGame game, Board theBoard,int roll) {
 		Solution suggestion;
 		
+		
 		if(makeAccusation){
 			if(game.checkAccusation(answer)){
 
@@ -101,6 +102,8 @@ public class ComputerPlayer extends Player {
 		
 		theBoard.calcTargets(this.getRow(),this.getCol(), roll);
 		BoardCell target=pickLocation(theBoard.getTargets());
+		this.setRow(target.getRow());
+		this.setCol(target.getColumn());
 		
 		if(target.isDoorway()){
 			Card tempCard = null;
@@ -116,8 +119,7 @@ public class ComputerPlayer extends Player {
 		}
 		
 		
-		this.setRow(target.getRow());
-		this.setCol(target.getColumn());
+		
 		theBoard.repaint();
 		
 	}
