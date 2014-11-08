@@ -71,7 +71,7 @@ public class RoomCell extends BoardCell {
 		g.setColor(Color.GRAY);
 		g.fillRect(ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row, ClueGame.CELL_SIZE, ClueGame.CELL_SIZE);
 		if(isNameCell) {
-			g.setFont((new Font("TimesRoman", Font.BOLD, 14)));
+			g.setFont((new Font("TimesRoman", Font.BOLD, ClueGame.CELL_SIZE/2)));
 			g.setColor(Color.BLUE);
 			g.drawString(" " + board.getRooms().get(roomInitial).toUpperCase(), ClueGame.CELL_SIZE * column, ClueGame.CELL_SIZE * row);
 		}

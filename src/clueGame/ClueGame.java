@@ -158,6 +158,10 @@ public class ClueGame extends JFrame  implements ComponentListener  {
 			isFirstRound = false;
 		}
 		scan.close();
+		
+		for(Player p: players){
+			p.setPlayers(players);
+		}
 	}
 
 
@@ -205,7 +209,8 @@ public class ClueGame extends JFrame  implements ComponentListener  {
 				return disprove;
 			}
 		}
-		controlGUI.setGuessResult("No new clue");
+		if(controlGUI!=null)
+			controlGUI.setGuessResult("No new clue");
 		//No one can disprove so return null
 		return null;
 
