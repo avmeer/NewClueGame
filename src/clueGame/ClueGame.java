@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class ClueGame extends JFrame {
+public class ClueGame extends JFrame  implements ComponentListener  {
 	private Map<Character,String> rooms;
 	private Board theBoard;
 	private String layoutFile;
@@ -33,7 +35,7 @@ public class ClueGame extends JFrame {
 	private ArrayList<Card> deck;
 	private ArrayList<Card> seen;
 	private Solution solution = null;
-	public static final int CELL_SIZE = 26;
+	public static int CELL_SIZE = 26;
 	private DetectiveNotes dN;
 	private HumanPlayer humanPlayer;
 	private int currentTurn=0;
@@ -71,6 +73,7 @@ public class ClueGame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
+		this.addComponentListener(this);
 
 	}
 
@@ -402,8 +405,44 @@ public class ClueGame extends JFrame {
 
 		game.setNotes(new DetectiveNotes(game.getDeck()));
 		game.getNotes().setVisible(false);
+		
+		
 		JOptionPane.showMessageDialog(game,"You are "+game.humanPlayer.getName()+", press Next Player to begin play","Welcome to Clue",JOptionPane.INFORMATION_MESSAGE);
 		board.setHumanPlayer(game.humanPlayer);
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		System.out.println("Resized");
+		int horizontalSize,verticalSize;
+		horizontalSize=(getWidth()-cardDisplay.getWidth())/(theBoard.getNumColumns()+1);
+		verticalSize=(this.getHeight()-controlGUI.getHeight())/(theBoard.getNumRows()+2);
+		if(verticalSize>horizontalSize){
+			CELL_SIZE=horizontalSize;
+		}
+		else{
+			CELL_SIZE=verticalSize;
+		}
+		
+		repaint();
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
